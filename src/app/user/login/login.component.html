@@ -1,1 +1,43 @@
-<p>login works!</p>
+<div class="overlay-container">
+  <div class="background-image"></div>
+
+  <div class="blur-overlay"></div>
+
+  <div class="login-card">
+    <mat-card>
+      <h2>Login</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Enter your username"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hiddePassword ? 'password' : 'text'"
+            placeholder="Enter your password"
+          />
+        </mat-form-field>
+
+        <div class="login-button">
+          <button
+            mat-flat-button
+            color="primary"
+            style="width: 100%"
+            type="submit"
+            [disabled]="!loginForm.valid"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

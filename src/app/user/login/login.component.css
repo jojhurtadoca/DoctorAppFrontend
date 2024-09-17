@@ -1,0 +1,58 @@
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://www.tuproyectodevida.pe/wp-content/uploads/2020/11/D%C3%B3nde-puedes-trabajar-como-doctor.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.login-card {
+  position: relative;
+  z-index: 2;
+}
+
+mat-card {
+  width: 350px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background-color: white;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  text-align: right;
+}
