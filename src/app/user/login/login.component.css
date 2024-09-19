@@ -56,3 +56,8 @@ mat-form-field {
 .login-button {
   text-align: right;
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+}

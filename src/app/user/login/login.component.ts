@@ -8,11 +8,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatCardModule, ReactiveFormsModule, FormsModule, MatInputModule, MatButtonModule, MatFormFieldModule],
+  imports: [MatCardModule, ReactiveFormsModule, FormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -42,11 +44,15 @@ export class LoginComponent {
 
     this.userService.login(request).subscribe({
       next: res => {
+        console.log('am here', res);
         this.sharedService.saveSession(res);
         this.router.navigate(['layout']);
       },
       complete: () => this.loading = false,
-      error: (error) => this.sharedService.showAlert(error.error, 'Error'),
+      error: (error) => {
+        this.sharedService.showAlert(error.error || "The system couldn't process this request, please try later", 'Error');
+        this.loading = false;
+      }
     })
   }
 }

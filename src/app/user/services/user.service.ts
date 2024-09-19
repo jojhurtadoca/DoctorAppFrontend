@@ -9,7 +9,7 @@ import { Session } from '../interfaces/session.model';
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl: string = environment.apiUrl + 'user';
+  baseUrl: string = environment.apiUrl + 'User';
   constructor(private readonly http: HttpClient) { }
 
   login(request: Login): Observable<Session> {
