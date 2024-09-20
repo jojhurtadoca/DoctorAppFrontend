@@ -41,7 +41,8 @@
 }
 
 mat-card {
-  width: 350px;
+  max-width: 450px;
+  width: 100%;
   padding: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
@@ -60,4 +61,8 @@ mat-form-field {
 .spinner {
   display: flex;
   justify-content: center;
+}
+
+.container {
+  padding: 24px;
 }
