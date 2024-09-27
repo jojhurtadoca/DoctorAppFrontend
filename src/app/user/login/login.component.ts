@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CookieService } from 'ngx-cookie-service';
+
 
 @Component({
   selector: 'app-login',
@@ -27,7 +29,8 @@ export class LoginComponent {
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private userService: UserService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private cookieService: CookieService,
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -44,8 +47,16 @@ export class LoginComponent {
 
     this.userService.login(request).subscribe({
       next: res => {
-        console.log('am here', res);
         this.sharedService.saveSession(res);
+        this.cookieService.set(
+          'Authorization',
+          `Bearer ${res.token}`,
+          undefined,
+          '/',
+          undefined,
+          true,
+          'Strict'
+        );
         this.router.navigate(['layout']);
       },
       complete: () => this.loading = false,

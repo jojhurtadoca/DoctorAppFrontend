@@ -18,7 +18,7 @@ export class SharedService {
   }
 
   saveSession(session: Session) {
-    localStorage.setItem("session", JSON.stringify(session));
+    localStorage.setItem("session", JSON.stringify(session.username));
   }
 
   getSession() {

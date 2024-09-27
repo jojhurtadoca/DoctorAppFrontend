@@ -6,6 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ActivatedRoute, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { SharedService } from '../shared.service';
 import { MatListItem, MatNavList } from '@angular/material/list';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-layout',
@@ -19,19 +20,21 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly sharedService: SharedService
+    private readonly sharedService: SharedService,
+    private cookieService: CookieService
   ) { }
 
   ngOnInit(): void {
     const user = this.sharedService.getSession();
     if (user) {
-      this.username = user.username;
+      this.username = user;
     }
     console.log(this.router.config);
   }
 
   closeSession(): void {
     this.sharedService.removeSession();
+    this.cookieService.delete('Authorization', '/');
     this.router.navigate(['login']);
   }
 }
