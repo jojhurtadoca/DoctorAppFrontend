@@ -45,6 +45,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit {
     this.userService.listUsers().subscribe({
       next: data => {
         if (data.isSuccess) {
+          console.log(data.result);
           this.dataSource = new MatTableDataSource(data.result);
           this.dataSource.paginator = this.paginator;
         } else {
