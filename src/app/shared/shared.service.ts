@@ -18,10 +18,12 @@ export class SharedService {
   }
 
   saveSession(session: Session) {
-    localStorage.setItem("session", JSON.stringify(session.username));
+    debugger;
+    localStorage.setItem("session", JSON.stringify(session.userName));
   }
 
   getSession() {
+    debugger;
     const sessionString = localStorage.getItem("session");
     const token = JSON.parse(sessionString!);
     return token;

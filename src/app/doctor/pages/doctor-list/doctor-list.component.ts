@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal, ViewChild } from '@angular/core';
 import { Doctor } from '../interfaces/doctor.interface';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,11 +12,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog } from '@angular/material/dialog';
 import { DoctorModalComponent } from '../../modals/doctor-modal/doctor-modal.component';
 import Swal from 'sweetalert2';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-doctor-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatCardModule, MatIconModule, MatDividerModule, MatButtonModule, MatFormFieldModule],
+  imports: [MatTableModule, MatInputModule, MatPaginatorModule, MatCardModule, MatIconModule, MatDividerModule, MatButtonModule, MatFormFieldModule],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.css'
 })
@@ -32,8 +33,8 @@ export class DoctorListComponent implements OnInit, AfterViewInit {
     'actions'
   ];
 
-  initialData: Doctor[] = [];
-  dataSource = new MatTableDataSource(this.initialData);
+  initialData = signal<Doctor[]>([]);
+  dataSource = new MatTableDataSource(this.initialData());
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -53,7 +54,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit {
           this.sharedService.showAlert('The system coud not retrieve the list, please try later', 'Error')
         }
       },
-      error: e => this.sharedService.showAlert(e.error.message, 'Error')
+      error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
     })
   }
 
@@ -101,7 +102,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit {
               this.sharedService.showAlert('Doctor could not be deleted, please try later', 'Error');
             }
           },
-          error: e => this.sharedService.showAlert(e.error.message, 'Error')
+          error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
         });
       }
     });

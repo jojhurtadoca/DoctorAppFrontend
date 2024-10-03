@@ -1,0 +1,35 @@
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure the toolbar is above other elements */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add box shadow */
+}
+
+.container-css {
+  display: flex;
+  margin-top: 64px; /* Adjust based on toolbar height */
+  width: 100%;
+}
+
+.sidenav {
+  position: fixed; /* Width of the sidenav */
+  margin-top: 64px;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2); /* Add box shadow */
+}
+
+.sidenav-container {
+  flex: 1; /* Make the sidenav-container take the remaining space */
+}
+
+.content {
+  padding: 16px; /* Padding for content area */
+  overflow: auto; /* Allow content to scroll */
+  height: calc(100vh - 64px); /* Full height minus toolbar height */
+}
+
+.content-area {
+  height: 100%; /* Ensures the area is always full height */
+  overflow: auto; /* Scrollable area */
+}

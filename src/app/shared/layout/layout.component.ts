@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -16,7 +16,7 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent implements OnInit {
-  username: string = '';
+  username = signal('');
 
   constructor(
     private readonly router: Router,
@@ -27,9 +27,8 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     const user = this.sharedService.getSession();
     if (user) {
-      this.username = user;
+      this.username.set(user);
     }
-    console.log(this.router.config);
   }
 
   closeSession(): void {

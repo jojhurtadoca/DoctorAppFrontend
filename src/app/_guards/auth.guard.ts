@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   let token = cookieService.get('Authorization');
 
   const user = sharedService.getSession();
-
+  
   if (token && user) {
     token = token.replace('Bearer ', '');
     const decodedToken = jwtDecode(token);

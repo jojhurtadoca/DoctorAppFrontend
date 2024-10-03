@@ -65,4 +65,5 @@ mat-form-field {
 
 .container {
   padding: 24px;
+  max-width: 540px !important;
 }

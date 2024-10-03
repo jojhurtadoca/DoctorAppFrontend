@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -12,11 +12,12 @@ import { SpecialtyModalComponent } from '../../modals/specialty-modal/specialty-
 import { MatButtonModule } from '@angular/material/button';
 import Swal from 'sweetalert2';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatCardModule, MatIconModule, MatDividerModule, MatButtonModule, MatFormFieldModule],
+  imports: [MatTableModule, MatInputModule, MatPaginatorModule, MatCardModule, MatIconModule, MatDividerModule, MatButtonModule, MatFormFieldModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -29,9 +30,9 @@ export class ListSpecialtyComponent implements OnInit, AfterViewInit {
     'Actions'
   ];
 
-  initialData: Specialty[] = [];
+  initialData = signal<Specialty[]>([]);
 
-  dataSource = new MatTableDataSource(this.initialData);
+  dataSource = new MatTableDataSource(this.initialData());
 
   @ViewChild(MatPaginator) pagination!: MatPaginator;
 
@@ -44,7 +45,7 @@ export class ListSpecialtyComponent implements OnInit, AfterViewInit {
   getSpecialties() {
     this.specialtyService.list().subscribe({
       next: data => data.isSuccess ? this.dataSource = new MatTableDataSource(data.result) : this.sharedService.showAlert('No data found', 'Warning'),
-      error: e => this.sharedService.showAlert(e.error.message, 'Error')
+      error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
     })
   }
 
@@ -92,7 +93,7 @@ export class ListSpecialtyComponent implements OnInit, AfterViewInit {
               this.sharedService.showAlert('Specialty could not be deleted, please try later', 'Error');
             }
           },
-          error: e => this.sharedService.showAlert(e.error.message, 'Error')
+          error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
         });
       }
     });

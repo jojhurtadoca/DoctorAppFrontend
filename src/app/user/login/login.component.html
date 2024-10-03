@@ -21,22 +21,22 @@
           <input
             matInput
             formControlName="password"
-            [type]="hiddePassword ? 'password' : 'text'"
+            [type]="hiddePassword() ? 'password' : 'text'"
             placeholder="Enter your password"
           />
           <button
             mat-icon-button
             matSuffix
-            (click)="hiddePassword = !hiddePassword"
+            (click)="triggerPassword($event)"
             [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hiddePassword"
+            [attr.aria-pressed]="hiddePassword()"
           >
             <mat-icon>{{
-              hiddePassword ? "visibility_off" : "visibility"
+              hiddePassword() ? "visibility_off" : "visibility"
             }}</mat-icon>
           </button>
         </mat-form-field>
-        @if (loading) {
+        @if (loading()) {
         <div class="spinner">
           <mat-spinner diameter="30px"></mat-spinner>
         </div>

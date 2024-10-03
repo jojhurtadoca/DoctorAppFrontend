@@ -1,25 +1,29 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Specialty } from '../../../specialty/interfaces/specialty';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Doctor } from '../../pages/interfaces/doctor.interface';
 import { SpecialtyService } from '../../../specialty/services/specialty.service';
 import { DoctorService } from '../../services/doctor.service';
 import { SharedService } from '../../../shared/shared.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-doctor-modal',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, MatDialogModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSelectModule, MatButtonModule],
   templateUrl: './doctor-modal.component.html',
   styleUrl: './doctor-modal.component.css'
 })
 export class DoctorModalComponent implements OnInit {
   
   formDoctor: FormGroup;
-  title: string = 'Add';
-  buttonName: string = 'Save';
-  specialtyList: Specialty[] = [];
+  title = signal('Add');
+  buttonName = signal('Save');
+  specialtyList = signal<Specialty[]>([]);
 
   constructor(
     private modal: MatDialogRef<DoctorModalComponent>,
@@ -35,18 +39,19 @@ export class DoctorModalComponent implements OnInit {
       address: ['', Validators.required],
       phone: [''],
       gender: ['M', Validators.required],
-      specialty: ['', Validators.required],
+      specialtyId: ['', Validators.required],
       status: ['1', Validators.required]
     });
 
     if (this.doctorData) {
-      this.title = 'Update';
-      this.buttonName = 'Update';
+      this.title.set('Update');
+      this.buttonName.set('Update');
     }
     this.specialtyService.activeList().subscribe({
       next: (data) => {
         if (data.isSuccess) {
-          this.specialtyList = data.result;
+          console.log('result', data.result)
+          this.specialtyList.set(data.result);
         }
       },
       error: (e) => {}
@@ -80,6 +85,8 @@ export class DoctorModalComponent implements OnInit {
       specialtyName: ''
     }
 
+    debugger;
+
     if (!this.doctorData) {
       this.doctorService.create(doctor).subscribe({
         next: (data) => {
@@ -90,7 +97,7 @@ export class DoctorModalComponent implements OnInit {
             this.sharedService.showAlert('The system could not create a doctor, please try later', 'Error');
           }
         },
-        error: e => this.sharedService.showAlert(e.error.message, 'Error')
+        error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
       })
     } else {
       this.doctorService.update(doctor).subscribe({
@@ -102,7 +109,7 @@ export class DoctorModalComponent implements OnInit {
             this.sharedService.showAlert('The system could not update a doctor, please try later', 'Error');
           }
         },
-        error: e => this.sharedService.showAlert(e.error.message, 'Error'),
+        error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error'),
       })
     }
 

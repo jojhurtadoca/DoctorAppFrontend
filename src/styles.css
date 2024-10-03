@@ -1,7 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.table-data {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-around;
+}
+
+.filter {
+  width: 30%;
+  float: right;
+}
+
+.mat-mdc-form-field {
+  display: block !important;
+}
+
+.no-result-filter {
+  padding: 20px;
+}

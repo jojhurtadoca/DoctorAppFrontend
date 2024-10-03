@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
@@ -22,8 +22,8 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  hiddePassword = true;
-  loading = false;
+  hiddePassword = signal(true);
+  loading = signal(false);
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -38,32 +38,40 @@ export class LoginComponent {
     })
   }
 
-  login() {
-    this.loading = true;
-    const request: Login = {
-      username: this.loginForm.value.username,
-      password: this.loginForm.value.password,
-    };
+  triggerPassword(event: Event) {
+    event.preventDefault();
+    this.hiddePassword.set(!this.hiddePassword());
+  }
 
-    this.userService.login(request).subscribe({
-      next: res => {
-        this.sharedService.saveSession(res);
-        this.cookieService.set(
-          'Authorization',
-          `Bearer ${res.token}`,
-          undefined,
-          '/',
-          undefined,
-          true,
-          'Strict'
-        );
-        this.router.navigate(['layout']);
-      },
-      complete: () => this.loading = false,
-      error: (error) => {
-        this.sharedService.showAlert(error.error || "The system couldn't process this request, please try later", 'Error');
-        this.loading = false;
-      }
-    })
+  login() {
+    if (this.loginForm.valid) {
+      this.loading.set(true);
+      const request: Login = {
+        username: this.loginForm.value.username,
+        password: this.loginForm.value.password,
+      };
+  
+      this.userService.login(request).subscribe({
+        next: res => {
+          debugger;
+          this.sharedService.saveSession(res);
+          this.cookieService.set(
+            'Authorization',
+            `Bearer ${res.token}`,
+            undefined,
+            '/',
+            undefined,
+            true,
+            'Strict'
+          );
+          this.router.navigate(['layout']);
+        },
+        complete: () => this.loading.set(false),
+        error: (error) => {
+          this.sharedService.showAlert(error.error || "The system couldn't process this request, please try later", 'Error');
+          this.loading.set(false);
+        }
+      })
+    }
   }
 }

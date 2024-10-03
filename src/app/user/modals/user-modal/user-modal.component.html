@@ -1,6 +1,6 @@
-<h2 mat-dialog-title>{{ title() }}</h2>
+<h2 mat-dialog-title>{{ title() }} user</h2>
 <mat-dialog-content style="padding-top: 10px">
-  <form [formGroup]="formDoctor">
+  <form [formGroup]="formUser">
     <div class="row mt-2">
       <div class="col-md-6">
         <mat-form-field class="full-width" appearance="outline">
@@ -26,48 +26,51 @@
       </div>
     </div>
     <div class="row mt-2">
-      <div class="col-12">
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Address</mat-label>
-          <textarea
-            maxlength="100"
-            formControlName="address"
-            matInput
-            autocomplete="off"
-          ></textarea>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Phone</mat-label>
+          <mat-label>Username</mat-label>
           <input
-            maxlength="100"
-            formControlName="phone"
+            formControlName="username"
             matInput
             autocomplete="off"
+            maxlength="60"
           />
         </mat-form-field>
       </div>
       <div class="col-md-6">
         <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Gender</mat-label>
-          <mat-select formControlName="gender">
-            <mat-option value="M">Male</mat-option>
-            <mat-option value="F">Female</mat-option>
-          </mat-select>
+          <mat-label>Password</mat-label>
+          <input
+            formControlName="password"
+            matInput
+            type="password"
+            autocomplete="off"
+            maxlength="60"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            formControlName="email"
+            matInput
+            autocomplete="off"
+            maxlength="60"
+          />
         </mat-form-field>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
         <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Specialty</mat-label>
-          <mat-select formControlName="specialtyId">
-            @for(specialty of specialtyList(); track specialty.id) {
-            <mat-option [value]="specialty.id">
-              {{ specialty.name }}
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            @for(role of roleList(); track role.roleName) {
+            <mat-option [value]="role.roleName">
+              {{ role.roleName }}
             </mat-option>
             }
           </mat-select>
@@ -90,8 +93,8 @@
   <button
     mat-raised-button
     color="primary"
-    [disabled]="formDoctor.invalid"
-    (click)="createEditDoctor()"
+    [disabled]="formUser.invalid"
+    (click)="createUser()"
   >
     {{ buttonName() }}
   </button>

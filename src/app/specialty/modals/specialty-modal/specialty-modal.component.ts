@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Specialty } from '../../interfaces/specialty';
@@ -19,8 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class SpecialtyModalComponent implements OnInit {
 
   specialtyForm: FormGroup;
-  title: string = "Add";
-  buttonName = "Save";
+  title = signal("Add");
+  buttonName = signal("Save");
 
   constructor(
     private readonly modal: MatDialogRef<SpecialtyModalComponent>,
@@ -36,8 +36,8 @@ export class SpecialtyModalComponent implements OnInit {
     });
 
     if (this.specialtyData) {
-      this.title = "Edit";
-      this.buttonName = "Update";
+      this.title.set("Edit");
+      this.buttonName.set("Update");
     }
   }
   
@@ -59,7 +59,7 @@ export class SpecialtyModalComponent implements OnInit {
       status: parseInt(this.specialtyForm.value.status),
     };
 
-    if(this.specialtyData) {
+    if(!this.specialtyData) {
       // Create new specialtype
       this.specialtyService.create(specialty).subscribe({
         next: data => {
@@ -70,7 +70,7 @@ export class SpecialtyModalComponent implements OnInit {
             this.sharedService.showAlert('Specialty was not created', 'Error');
           }
         },
-        error: e => this.sharedService.showAlert(e.error.message, 'Error')
+        error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
       })
     } else {
       this.specialtyService.update(specialty).subscribe({
@@ -82,7 +82,7 @@ export class SpecialtyModalComponent implements OnInit {
             this.sharedService.showAlert('Specialty was not updated', 'Error');
           }
         },
-        error: e => this.sharedService.showAlert(e.error.message, 'Error')
+        error: e => this.sharedService.showAlert((e.error.errors || e.error.errorMessage) || 'Internal server error', 'Error')
       })
     }
   }
